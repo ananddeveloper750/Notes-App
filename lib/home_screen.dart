@@ -61,98 +61,101 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          showModalBottomSheet(
+           showModalBottomSheet(
             context: context,
+             isScrollControlled: true,
             builder: (context) {
               return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Add Notes",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                      ),
-                    ),
-                    SizedBox(height: 70),
-                    TextField(
-                      controller: title,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        label: Text("Title"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom, // Keyboard height ke according padding
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Add Notes",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
                         ),
                       ),
-                    ),
-                    SizedBox(height: 30),
-                    TextField(
-                      controller: desc,
-                      maxLines: null,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        label: Text("Description"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                      SizedBox(height: 70),
+                      TextField(
+                        controller: title,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          label: Text("Title"),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 30),
-                    InkWell(
-                      onTap: () async {
-                        if (title.text.isNotEmpty && desc.text.isNotEmpty) {
-                          dbRef!.addNote(
-                            mTitle: title.text.toString(),
-                            mDesc: desc.text.toString(),
-                          );
-                          bool? check = await dbRef?.addNote(
-                            mTitle: title.text.toString(),
-                            mDesc: desc.text.toString(),
-                          );
-                          if (check!) {
-                            getAllNotes();
-                          }
-                          title.clear();
-                          desc.clear();
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Notes Added Successfully")),
-                          );
-                        } else {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Please feel the all required field",
+                      SizedBox(height: 30),
+                      TextField(
+                        controller: desc,
+                        maxLines: null,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          label: Text("Description"),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      InkWell(
+                        onTap: () async {
+                          if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            bool? check = await dbRef?.addNote(
+                              mTitle: title.text.toString(),
+                              mDesc: desc.text.toString(),
+                            );
+                            if (check!) {
+                              getAllNotes();
+                            }
+                            title.clear();
+                            desc.clear();
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Notes Added Successfully")),
+                            );
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Please feel the all required field",
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              "Add note",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            );
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                "Add note",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
+
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 60),
+                    ],
+                  ),
                 ),
               );
             },
