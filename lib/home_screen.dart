@@ -133,10 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     searchController.text,
                   ),
                   leading: Text(
-                    "${filteredNotes[index][DBHelper.TABLE_NOTE_SR_NO]}",
+                    "${index+1}",
                   ),
                   trailing: SizedBox(
-                    width: 60,
+                    width: 80,
                     child: Row(
                       children: [
                         InkWell(
@@ -153,9 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             );
                           },
-                          child: Icon(Icons.edit),
+                          child: Icon(Icons.edit,size: 30,),
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 25),
                         InkWell(
                           onTap: () async {
                             bool check = await dbRef!.deleteNote(
