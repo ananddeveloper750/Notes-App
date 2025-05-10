@@ -44,21 +44,46 @@ class DBHelper {
     );
   }
 
-
   /// all query
 
   /// add notes
-  Future<bool> addNote({required String mTitle,required String mDesc}) async {
+  Future<bool> addNote({required String mTitle, required String mDesc}) async {
     var db = await getDB();
-   int rowAffected=await db.insert(TABLE_NAME, {TABLE_NOTE_TITLE: mTitle, TABLE_NOTE_DESC: mDesc});
-   return rowAffected>0;
+    int rowAffected = await db.insert(TABLE_NAME, {
+      TABLE_NOTE_TITLE: mTitle,
+      TABLE_NOTE_DESC: mDesc,
+    });
+    return rowAffected > 0;
   }
 
-
-/// reading notes
-  Future<List<Map<String,dynamic>>> getAllNotes()async{
-    var db= await getDB();
-    List<Map<String,dynamic>> mData= await db.query(TABLE_NAME);
+  /// reading notes
+  Future<List<Map<String, dynamic>>> getAllNotes() async {
+    var db = await getDB();
+    List<Map<String, dynamic>> mData = await db.query(TABLE_NAME);
     return mData;
+  }
+
+  Future<bool> updateNote({
+    required String title,
+    required String desc,
+    required int sno,
+  }) async {
+    var db = await getDB();
+
+    int rowAffected = await db.update(TABLE_NAME, {
+      TABLE_NOTE_TITLE: title,
+      TABLE_NOTE_DESC: desc,
+    }, where: "$TABLE_NOTE_SR_NO=$sno");
+    return rowAffected > 0;
+  }
+
+  Future<bool> deleteNote({required int index}) async {
+    var db = await getDB();
+    int rowAffected = await db.delete(
+      TABLE_NAME,
+      where: "$TABLE_NOTE_SR_NO=?",
+      whereArgs: [index],
+    );
+    return rowAffected > 0;
   }
 }
